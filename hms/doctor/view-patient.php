@@ -47,6 +47,7 @@ if(strlen($_SESSION['id']==0)) {
           
             if ($stmt->execute()) {
                 echo "Files uploaded successfully: " . implode(', ', $uploadedFiles);
+                
             } else {
                 echo "Error saving files to database.";
             }
@@ -119,6 +120,8 @@ if(strlen($_SESSION['id']==0)) {
                                 $ret=mysqli_query($con,"select * from tblpatient where ID='$vid'");
                                 $cnt=1;
                                 while ($row=mysqli_fetch_array($ret)) {
+                                    $uploadedFiles = $row['UploadedFiles'];  // String of file paths or URLs
+                                    $fileArray = explode(',', $uploadedFiles);  // Split string into array using comma as delimiter
                             ?>
                             <table border="1" class="table table-bordered">
                                 <tr align="center">
@@ -147,6 +150,17 @@ if(strlen($_SESSION['id']==0)) {
                                     <td><?php echo $row['PatientMedhis']; ?></td>
                                     <th>Patient Reg Date</th>
                                     <td><?php echo $row['CreationDate']; ?></td>
+                                </tr>
+                                <tr>
+                                    <th>Report files (if  any) </th>
+                                    <td><?php
+      // Loop through the file array and generate a link for each file
+      foreach ($fileArray as $file) {
+        // Assuming each file is a URL or path that is valid
+        echo '<a href="' . trim($file) . '" target="_blank">' . basename(trim($file)) . '</a><br>';
+      }
+      ?></td>
+                                    
                                 </tr>
                             </table>
                             <?php } ?>
@@ -264,6 +278,8 @@ $ret = mysqli_query($con, "select * from tblmedicalhistory where PatientID='$vid
                     processData: false,
                     success: function(response) {
                         alert(response);
+                        window.location.reload();
+
                     },
                     error: function() {
                         alert('Error uploading files.');

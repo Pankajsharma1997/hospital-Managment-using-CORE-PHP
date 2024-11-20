@@ -70,7 +70,7 @@ if(strlen($_SESSION['id']==0)) {
 <tbody>
 <?php
 $docid=$_SESSION['id'];
-$sql=mysqli_query($con,"select * from tblpatient where Docid='$docid' ");
+$sql=mysqli_query($con,"select * from tblpatient where Docid='$docid' ORDER BY creationDate DESC ");
 $cnt=1;
 while($row=mysqli_fetch_array($sql))
 {

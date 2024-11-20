@@ -121,7 +121,7 @@ echo "<script>window.location.href ='index.php'</script>";
             </div>
             <div class="col-sm-12 blog-cont">
                 <div class="row no-margin">
-                    <div class="col-sm-4 blog-smk">
+                    <div class="col-sm-3 blog-smk">
                         <div class="blog-single">
 
                                 <img src="assets/images/patient.jpg" alt="">
@@ -134,7 +134,7 @@ echo "<script>window.location.href ='index.php'</script>";
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-4 blog-smk">
+                    <div class="col-sm-3 blog-smk">
                         <div class="blog-single">
 
                                 <img src="assets/images/doctor.jpg" alt="">
@@ -147,8 +147,22 @@ echo "<script>window.location.href ='index.php'</script>";
                             </div>
                         </div>
                     </div>
+                    <div class="col-sm-3 blog-smk">
+                        <div class="blog-single">
+
+                                <img src="assets/images/doctor.jpg" alt="">
+
+                            <div class="blog-single-det">
+                                <h6>Receptionist login</h6>
+                                <a href="hms/receptionist" target="_blank">
+                                    <button class="btn btn-success btn-sm">Click Here</button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                     
-                    <div class="col-sm-4 blog-smk">
+                    
+                    <div class="col-sm-3 blog-smk">
                         <div class="blog-single">
 
                                 <img src="assets/images/admin.jpg" alt="">

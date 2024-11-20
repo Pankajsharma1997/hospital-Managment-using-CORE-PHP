@@ -50,6 +50,36 @@
 									
 								</ul>
 								</li>
+								<li>
+								<a href="javascript:void(0)">
+									<div class="item-content">
+										<div class="item-media">
+											<i class="ti-user"></i>
+										</div>
+										<div class="item-inner">
+											<span class="title"> Staff </span><i class="icon-arrow"></i>
+										</div>
+									</div>
+								</a>
+								<ul class="sub-menu">
+									<li>
+										<a href="staff-specilization.php">
+											<span class="title"> Staff Specialization </span>
+										</a>
+									</li>
+									<li>
+										<a href="add-staff.php">
+											<span class="title"> Add Staff</span>
+										</a>
+									</li>
+									<!-- <li>
+										<a href="Manage-doctors.php">
+											<span class="title"> Manage Doctors </span>
+										</a>
+									</li> -->
+									
+								</ul>
+								</li>
 
 				<li>
 								<a href="javascript:void(0)">
