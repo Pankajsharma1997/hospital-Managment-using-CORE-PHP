@@ -2,31 +2,28 @@
 session_start();
 error_reporting(0);
 include('include/config.php');
-if(strlen($_SESSION['id']==0)) {
- header('location:logout.php');
-  } else{
-if(isset($_POST['submit']))
-{
-	$docspecialization=$_POST['Doctorspecialization'];
-$docname=$_POST['docname'];
-$docaddress=$_POST['clinicaddress'];
-$docfees=$_POST['docfees'];
-$doccontactno=$_POST['doccontact'];
-$docemail=$_POST['docemail'];
-$timeslots = $_POST['timeslots']? implode(',', $_POST['timeslots']) : '';
-$sql=mysqli_query($con,"Update doctors set specilization='$docspecialization',doctorName='$docname',address='$docaddress',docFees='$docfees',contactno='$doccontactno' , timeslots ='$timeslots'where id='".$_SESSION['id']."'");
-if($sql)
-{
-echo "<script>alert('Doctor Details updated Successfully');</script>";
-
+if(strlen($_SESSION['id']==0)){
+    header('location:logout.php');
+}else{
+$sid = intval($_GET['id']); // Staff id 
 }
+if(isset($_POST['submit'])){
+    $staffSpecilization = $_POST['staffSpecialization'];
+    $staffName          = $_POST['staffName'];
+    $staffAddress       = $_POST['staffAddress'];
+    $staffContact       = $_POST['staffContact'];
+    $staffEmail         = $_POST['staffEmail'];
+    $sql = mysqli_query($con, "update staff set specilization ='$staffSpecilization' , staffName ='$staffName', address ='staffAddress',contactno ='staffContact', staffEmail='$staffEmail'  where id='$sid'");
+    if($sql){
+        $msg="Staff Details are updated Successfully";
+    }
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
-	<head>
-		<title>Doctr | Edit Doctor Details</title>
-		
+<html lang="eng"> 
+<head> 
+    <title> Admin | Edit Staff Details </title>
+     
 		<link href="http://fonts.googleapis.com/css?family=Lato:300,400,400italic,600,700|Raleway:300,400,500,600,700|Crete+Round:400italic" rel="stylesheet" type="text/css" />
 		<link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
 		<link rel="stylesheet" href="vendor/fontawesome/css/font-awesome.min.css">
@@ -41,68 +38,64 @@ echo "<script>alert('Doctor Details updated Successfully');</script>";
 		<link rel="stylesheet" href="assets/css/styles.css">
 		<link rel="stylesheet" href="assets/css/plugins.css">
 		<link rel="stylesheet" href="assets/css/themes/theme-1.css" id="skin_color" />
+</head>
+<body>
+    <div id ="app"> 
+      <?php include('include/sidebar.php');?> 
+      <div class ="app-content">
+          <?php include('include/header.php');?>
+          <!-- start: MENU TOGGLER FOR MOBILE DEVICES  -->
+          <!-- end: TOP NAVBAR   -->
+           <div class="main-content">
+            <div class="wrap-content container" id="container">
+                <!--  start : PAGE TITLE  -->
+                  <section id ="page-title"> 
+                    <div class="row"> 
+                        <div class="col-sm-8"> 
+                            <h1 class="mainTitle"> Admin | Edit Staff Details   </h1>
+                        </div>
+                        <ol class="breadcrumb">
+                            <li> 
+                                <span> Admin </span>
+                            </li> 
+                            <li class="active"> 
+                                 <span> Edit Staff Details </span>
+                            </li>
+                        </ol>
+                    </div>
+                  </section>
+                  <!--  End : Page TITLE -->
 
-
-	</head>
-	<body>
-		<div id="app">		
-<?php include('include/sidebar.php');?>
-			<div class="app-content">
-				<?php include('include/header.php');?>
-				<div class="main-content" >
-					<div class="wrap-content container" id="container">
-						<!-- start: PAGE TITLE -->
-						<section id="page-title">
-							<div class="row">
-								<div class="col-sm-8">
-									<h1 class="mainTitle">Doctor | Edit Doctor Details</h1>
-																	</div>
-								<ol class="breadcrumb">
-									<li>
-										<span>Doctor</span>
-									</li>
-									<li class="active">
-										<span>Edit Doctor Details</span>
-									</li>
-								</ol>
-							</div>
-						</section>
-						<!-- end: PAGE TITLE -->
-						<!-- start: BASIC EXAMPLE -->
+                  <!-- start: BASIC EXAMPLE -->
 						<div class="container-fluid container-fullw bg-white">
 							<div class="row">
 								<div class="col-md-12">
-									
+									<h5 style="color: green; font-size:18px; ">
+<?php if($msg) { echo htmlentities($msg);}?> </h5>
 									<div class="row margin-top-30">
 										<div class="col-lg-8 col-md-12">
 											<div class="panel panel-white">
 												<div class="panel-heading">
-													<h5 class="panel-title">Edit Doctor</h5>
+													<h5 class="panel-title">Edit Staff info</h5>
 												</div>
 												<div class="panel-body">
-									<?php 
-$did=$_SESSION['dlogin'];
-$sql=mysqli_query($con,"select * from doctors where docEmail='$did'");
+									<?php $sql=mysqli_query($con,"select * from staff where id='$sid'");
 while($data=mysqli_fetch_array($sql))
 {
-	// Convert the timeslots string to an array
-	$timeslots = explode(',', $data['timeslots']);	
+		
 ?>
-<h4><?php echo htmlentities($data['doctorName']);?>'s Profile</h4>
-<p><b>Profile Reg. Date: </b><?php echo htmlentities($data['creationDate']);?></p>
-<?php if($data['updationDate']){?>
-<p><b>Profile Last Updation Date: </b><?php echo htmlentities($data['updationDate']);?></p>
-<?php } ?>
+<h4><?php echo htmlentities($data['staffName']);?>'s Profile</h4>
+
 <hr />
 													<form role="form" name="adddoc" method="post" onSubmit="return valid();">
 														<div class="form-group">
-															<label for="DoctorSpecialization">
-																Doctor Specialization
+															<label for="StaffSpecialization">
+																Staff Specialization
 															</label>
-							<select name="Doctorspecialization" class="form-control" required="required">
+							<select name="staffSpecialization" class="form-control" required="required">
 					<option value="<?php echo htmlentities($data['specilization']);?>">
 					<?php echo htmlentities($data['specilization']);?></option>
-<?php $ret=mysqli_query($con,"select * from doctorspecilization");
+<?php $ret=mysqli_query($con,"select * from staffspecilization");
 while($row=mysqli_fetch_array($ret))
 {
 ?>
@@ -115,60 +108,28 @@ while($row=mysqli_fetch_array($ret))
 														</div>
 
 <div class="form-group">
-															<label for="doctorname">
-																 Doctor Name
+															<label for="staffname">
+																 Staff Name
 															</label>
-	<input type="text" name="docname" class="form-control" value="<?php echo htmlentities($data['doctorName']);?>" >
+	<input type="text" name="staffName" class="form-control" value="<?php echo htmlentities($data['staffName']);?>" >
 														</div>
 
 
-<div class="form-group">
-															<label for="address">
-																 Doctor Clinic Address
-															</label>
-					<textarea name="clinicaddress" class="form-control"><?php echo htmlentities($data['address']);?></textarea>
-														</div>
-<div class="form-group">
-															<label for="fess">
-																 Doctor Consultancy Fees
-															</label>
-		<input type="text" name="docfees" class="form-control" required="required"  value="<?php echo htmlentities($data['docFees']);?>" >
-														</div>
+
 	
 <div class="form-group">
-									<label for="fess">
-																 Doctor Contact no
+									<label for="Contact Number">
+																 Staff Contact no
 															</label>
-					<input type="text" name="doccontact" class="form-control" required="required"  value="<?php echo htmlentities($data['contactno']);?>">
+					<input type="text" name="staffContact" class="form-control" required="required"  value="<?php echo htmlentities($data['contactno']);?>">
 														</div>
 
 <div class="form-group">
-									<label for="fess">
-																 Doctor Email
+									<label for="Staff Email ">
+																 Staff Email
 															</label>
-					<input type="email" name="docemail" class="form-control"  readonly="readonly"  value="<?php echo htmlentities($data['docEmail']);?>">
+					<input type="email" name="staffEmail" class="form-control"  readonly="readonly"  value="<?php echo htmlentities($data['staffEmail']);?>">
 														</div>
-														<div class="form-group">
-        <label for="timeslots">Available Timeslots</label><br>
-        
-        <!-- Loop through the array and create a checkbox for each timeslot -->
-        <?php 
-        $available_times = ['10:00 AM', ' 10:30 AM', ' 11:00 AM', ' 11:30 AM', ' 12:00 PM', ' 12:30 PM', ' 01:00 PM', ' 01:30 PM', ' 02:00 PM', ' 02:30 PM', ' 03:00 PM',' 03:30 PM' , ' 04:00 PM' , ' 04:30 PM']; // Example times
-        foreach ($available_times as $slot) {
-            $checked = in_array($slot, $timeslots) ? 'checked' : ''; // Check if the slot is selected for this doctor
-        ?> 
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" name="timeslots[]" value="<?php echo $slot; ?>" <?php echo $checked; ?>>
-                    <?php echo $slot; ?>
-                </label>
-            </div>
-        <?php } ?>
-    </div>
-
-
-
-														
 														<?php } ?>
 														
 														
@@ -182,30 +143,31 @@ while($row=mysqli_fetch_array($ret))
 											
 											</div>
 										</div>
-									
+									<div class="col-lg-12 col-md-12">
+											<div class="panel panel-white">
+												
+												
+											</div>
+										</div>
+									</div>
 								</div>
-							
+							</div>
+						</div>
 						<!-- end: BASIC EXAMPLE -->
 			
 					
-					
-						
-						
-					
-						<!-- end: SELECT BOXES -->
-						
-					</div>
-				</div>
-			</div>
-			<!-- start: FOOTER -->
+            </div>
+           </div>
+      <!-- start: FOOTER -->
 	<?php include('include/footer.php');?>
 			<!-- end: FOOTER -->
 		
 			<!-- start: SETTINGS -->
 	<?php include('include/setting.php');?>
+			
 			<!-- end: SETTINGS -->
-		</div>
-		<!-- start: MAIN JAVASCRIPTS -->
+
+<!-- start: MAIN JAVASCRIPTS -->
 		<script src="vendor/jquery/jquery.min.js"></script>
 		<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
 		<script src="vendor/modernizr/modernizr.js"></script>
@@ -237,4 +199,4 @@ while($row=mysqli_fetch_array($ret))
 		<!-- end: CLIP-TWO JAVASCRIPTS -->
 	</body>
 </html>
-<?php } ?>
+

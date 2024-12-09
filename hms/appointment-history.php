@@ -112,6 +112,9 @@ if(($row['userStatus']==1) && ($row['doctorStatus']==0))
 {
 	echo "Cancel by Doctor";
 }
+if($row['doctorStatus'] == 2) {
+	echo " Mark Completed By Doctor ";
+}
 
 
 
@@ -125,7 +128,7 @@ if(($row['userStatus']==1) && ($row['doctorStatus']==0))
 	<a href="appointment-history.php?id=<?php echo $row['id']?>&cancel=update" onClick="return confirm('Are you sure you want to cancel this appointment ?')"class="btn btn-primary btn-xs" title="Cancel Appointment" tooltip-placement="top" tooltip="Remove">Cancel</a>
 	<?php } else {
 
-		echo "Canceled";
+		echo "Completed";
 		} ?>
 												</div>
 												<div class="visible-xs visible-sm hidden-md hidden-lg">

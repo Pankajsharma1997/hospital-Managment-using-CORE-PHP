@@ -126,6 +126,7 @@ return true;
 										Log-in
 									</a>
 								</p>
+								<a href="../index.php">Back to Home Page</a>
 								<button type="submit" class="btn btn-primary pull-right" id="submit" name="submit">
 									Submit <i class="fa fa-arrow-circle-right"></i>
 								</button>

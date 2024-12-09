@@ -8,7 +8,7 @@ if(isset($_POST['change']))
 $cno=$_SESSION['cnumber'];
 $email=$_SESSION['email'];
 $newpassword=md5($_POST['password']);
-$query=mysqli_query($con,"update doctors set password='$newpassword' where contactno='$cno' and docEmail='$email'");
+$query=mysqli_query($con,"update staff set password='$newpassword' where contactno='$cno' and staffEmail='$email'");
 if ($query) {
 echo "<script>alert('Password successfully updated.');</script>";
 echo "<script>window.location.href ='index.php'</script>";
@@ -53,14 +53,14 @@ return true;
 		<div class="row">
 			<div class="main-login col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4">
 				<div class="logo margin-top-30">
-				<a href="../index.php"><h2> HMS | Patient Reset Password</h2></a>
+				<a href="../index.php"><h2> HMS | Recepient  Reset Password</h2></a>
 				</div>
 
 				<div class="box-login">
 					<form class="form-login" name="passwordreset" method="post" onSubmit="return valid();">
 						<fieldset>
 							<legend>
-								Patient Reset Password
+								Recepient Reset Password
 							</legend>
 							<p>
 								Please set your new password.<br />

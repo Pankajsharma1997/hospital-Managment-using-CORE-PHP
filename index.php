@@ -358,7 +358,22 @@ while ($row=mysqli_fetch_array($ret)) {
                     </div>
                      <div  class="row cf-ro">
                         <div  class="col-sm-3"><label>Mobile Number:</label></div>
-                        <div class="col-sm-8"><input type="text" name="mobileno" placeholder="Enter Mobile Number" class="form-control input-sm" required ></div>
+                        <div class="col-sm-8"><input type="text" name="mobileno" id="mobileno" placeholder="Enter Mobile Number" class="form-control input-sm"  maxlength="10"pattern="[0-9]+"  oninput="validatePhoneNumber()"required  ></div>          
+<script> 
+	function validatePhoneNumber() {
+  var inputField = document.getElementById('mobileno');
+  var value = inputField.value;
+
+  // Allow only numeric values and check for length
+  if (!/^[0-9]*$/.test(value)) {
+    inputField.setCustomValidity("Please enter only numbers.");
+  } else if (value.length > 10) {
+    inputField.setCustomValidity("Phone number cannot be more than 10 digits.");
+  } else {
+    inputField.setCustomValidity("");  // Clear the validation message if input is valid
+  }
+}
+</script>
                     </div>
                      <div  class="row cf-ro">
                         <div  class="col-sm-3"><label>Enter  Message:</label></div>

@@ -81,7 +81,7 @@ echo "<script>window.location.href='user-login.php'</script>";
 								</a>
 							</div>
 							<div class="form-actions">
-								
+							<a href="../index.php">Back to Home Page</a>
 								<button type="submit" class="btn btn-primary pull-right" name="submit">
 									Login <i class="fa fa-arrow-circle-right"></i>
 								</button>

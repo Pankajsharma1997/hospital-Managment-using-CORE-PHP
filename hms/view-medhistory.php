@@ -133,7 +133,9 @@ $ret=mysqli_query($con,"select * from tblmedicalhistory  where PatientID='$vid'"
 <th>Blood Sugar</th>
 <th>Body Temprature</th>
 <th>Medical Prescription</th>
-<th>Visit Date</th>
+<th>Next Appointment </th>
+
+
 </tr>
 <?php  
 while ($row=mysqli_fetch_array($ret)) { 
@@ -145,7 +147,7 @@ while ($row=mysqli_fetch_array($ret)) {
  <td><?php  echo $row['BloodSugar'];?></td> 
   <td><?php  echo $row['Temperature'];?></td>
   <td><?php  echo $row['MedicalPres'];?></td>
-  <td><?php  echo $row['CreationDate'];?></td> 
+  <td><?php  echo $row['nextAppointment'];?></td> 
 </tr>
 <?php $cnt=$cnt+1;} ?>
 </table>

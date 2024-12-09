@@ -10,13 +10,13 @@ $currentTime = date( 'd-m-Y h:i:s A', time () );
 if(isset($_POST['submit']))
 {
 $cpass=md5($_POST['cpass']);
-$did=$_SESSION['id'];
-$sql=mysqli_query($con,"SELECT password FROM  doctors where password='$cpass' && id='$did'");
+$sid=$_SESSION['id'];
+$sql=mysqli_query($con,"SELECT password FROM  staff where password='$cpass' && id='$sid'");
 $num=mysqli_fetch_array($sql);
 if($num>0)
 {
 $npass=md5($_POST['npass']);
- $con=mysqli_query($con,"update doctors set password='$npass', updationDate='$currentTime' where id='$did'");
+ $con=mysqli_query($con,"update staff set password='$npass', updationDate='$currentTime' where id='$did'");
 $_SESSION['msg1']="Password Changed Successfully !!";
 }
 else
@@ -28,7 +28,7 @@ $_SESSION['msg1']="Old Password not match !!";
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>Doctor  | change Password</title>
+		<title> Receptionist  | change Password</title>
 		
 		<link href="http://fonts.googleapis.com/css?family=Lato:300,400,400italic,600,700|Raleway:300,400,500,600,700|Crete+Round:400italic" rel="stylesheet" type="text/css" />
 		<link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
@@ -90,11 +90,11 @@ return true;
 						<section id="page-title">
 							<div class="row">
 								<div class="col-sm-8">
-									<h1 class="mainTitle">Doctor | Change Password</h1>
+									<h1 class="mainTitle">Receptionist | Change Password</h1>
 																	</div>
 								<ol class="breadcrumb">
 									<li>
-										<span>Doctor</span>
+										<span> Receptionist </span>
 									</li>
 									<li class="active">
 										<span>Change Password</span>

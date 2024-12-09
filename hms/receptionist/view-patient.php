@@ -151,46 +151,7 @@ if(strlen($_SESSION['id']==0)) {
                             </table>
                             <?php } ?>
 
-                            <h5 class="over-title margin-bottom-15">Add Medical History</h5>
-                            <form id="uploadForm" method="post" enctype="multipart/form-data">
-                                <table class="table table-bordered table-hover">
-                                    <tr>
-                                        <th>Blood Pressure:</th>
-                                        <td><input name="bp" placeholder="Blood Pressure" class="form-control" required="true"></td>
-                                    </tr>
-                                    <tr>
-                                        <th>Blood Sugar:</th>
-                                        <td><input name="bs" placeholder="Blood Sugar" class="form-control" required="true"></td>
-                                    </tr>
-                                    <tr>
-                                        <th>Weight:</th>
-                                        <td><input name="weight" placeholder="Weight" class="form-control" required="true"></td>
-                                    </tr>
-                                    <tr>
-                                        <th>Body Temperature:</th>
-                                        <td><input name="temp" placeholder="Body Temperature" class="form-control" required="true"></td>
-                                    </tr>
-                                    <tr>
-                                        <th>Medical Prescription:</th>
-                                        <td><textarea name="pres" placeholder="Medical Prescription" rows="12" cols="14" class="form-control" required="true"></textarea></td>
-                                    </tr>
-                                    <tr>
-                                        <th>Upload Files:</th>
-                                        <td>
-                                            <div id="fileUploadsContainer">
-                                                <div class="file-upload">
-                                                    <input type="file" name="files[]" accept="*/*" required>
-                                                </div>
-                                            </div>
-                                            <div class="add-file">
-                                                <i class="fas fa-plus-circle"></i> Add Files
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-
-                                <button type="submit" name="submit" id="submit-btn" class="btn btn-primary">Submit</button>
-                            </form>
+                            
                         </div>
                         <div class="col-md-12">
                         <?php  
@@ -223,6 +184,7 @@ $ret = mysqli_query($con, "select * from tblmedicalhistory where PatientID='$vid
     <td><?php echo $row['BloodSugar']; ?></td> 
     <td><?php echo $row['Temperature']; ?></td>
     <td><?php echo $row['MedicalPres']; ?></td>
+    <td><?php echo $row['nextAppointment']; ?> </td>
     <td><?php echo $row['CreationDate']; ?></td>
     <td>
       <?php

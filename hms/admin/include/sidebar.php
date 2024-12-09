@@ -72,11 +72,11 @@
 											<span class="title"> Add Staff</span>
 										</a>
 									</li>
-									<!-- <li>
-										<a href="Manage-doctors.php">
-											<span class="title"> Manage Doctors </span>
+									<li>
+										<a href="manage-staff.php">
+											<span class="title"> Manage Staff Members  </span>
 										</a>
-									</li> -->
+									</li>
 									
 								</ul>
 								</li>
@@ -214,7 +214,13 @@
 											<span class="title">B/w dates reports </span>
 										</a>
 									</li>
+									<li>
+										<a href="doctors_report.php">
+											<span class="title">Doctor  report </span>
+										</a>
+									</li>
 								</ul>
+
 							</li>
 
 <!--- Pages---->

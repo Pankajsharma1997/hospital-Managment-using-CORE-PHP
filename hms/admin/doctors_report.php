@@ -10,7 +10,7 @@ if(strlen($_SESSION['id']==0)) {
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>Receptionist | Manage Patients</title>
+		<title>Admin | Doctors Report</title>
 		
 		<link href="http://fonts.googleapis.com/css?family=Lato:300,400,400italic,600,700|Raleway:300,400,500,600,700|Crete+Round:400italic" rel="stylesheet" type="text/css" />
 		<link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
@@ -26,6 +26,7 @@ if(strlen($_SESSION['id']==0)) {
 		<link rel="stylesheet" href="assets/css/styles.css">
 		<link rel="stylesheet" href="assets/css/plugins.css">
 		<link rel="stylesheet" href="assets/css/themes/theme-1.css" id="skin_color" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 	</head>
 	<body>
 		<div id="app">		
@@ -34,19 +35,18 @@ if(strlen($_SESSION['id']==0)) {
 <?php include('include/header.php');?>
 <div class="main-content" >
 <div class="wrap-content container" id="container">
-
 						<!-- start: PAGE TITLE -->
 <section id="page-title">
 <div class="row">
 <div class="col-sm-8">
-<h1 class="mainTitle">Receptionist | Manage Patients</h1>
+<h1 class="mainTitle">Admin | Doctor Report </h1>
 </div>
 <ol class="breadcrumb">
 <li>
-<span>Receptionist</span>
+<span>Admin</span>
 </li>
 <li class="active">
-<span>Manage Patients</span>
+<span>View Doctors Report </span>
 </li>
 </ol>
 </div>
@@ -54,62 +54,80 @@ if(strlen($_SESSION['id']==0)) {
 <div class="container-fluid container-fullw bg-white">
 <div class="row">
 <div class="col-md-12">
-<h5 class="over-title margin-bottom-15">Manage <span class="text-bold">Patients</span></h5>
-	
-<table class="table table-hover" id="sample-table-1">
-<thead>
-<tr>
-<th class="center">#</th>
-<th>Patient Name</th>
-<th>Patient Contact Number</th>
-<th>Patient Gender </th>
-<th>Next Appointment </th>
-<th>Creation Date </th>
-<th>Updation Date </th>
-<th>Action</th>
-</tr>
-</thead>
-<tbody>
+<h4 class="tittle-w3-agileits mb-4"> Doctors Report </h4>
 <?php
-// $sql=mysqli_query($con,"select * from tblpatient ");
-$sql = mysqli_query($con, "
-    SELECT *  
-    FROM tblpatient p
-    LEFT JOIN tblmedicalhistory mh ON p.ID = mh.PatientID
-    ORDER BY p.CreationDate DESC
-");
+// Query to get doctor names and patients checked
+$sql ="SELECT 
+    doctors.doctorName, 
+    COUNT(tblpatient.PatientName) AS patient_count
+FROM 
+    doctors
+JOIN 
+    tblpatient ON doctors.id = tblpatient.docid
+GROUP BY 
+    doctors.doctorName;";
 
-$cnt=1;
-while($row=mysqli_fetch_array($sql))
-{
+
+// Correct SQL query execution
+$result = $con->query($sql);
+// Arrays to hold the values
+$xValues = [];
+$yValues = [];
+
+
+// Fetch the data and store in arrays
+if ($result->num_rows > 0) {
+    while($row = $result->fetch_assoc()) {
+        $xValues[] = $row['doctorName'];
+        $yValues[] = $row['patient_count'];
+    }
+} else {
+    echo "0 results";
+}
+$con->close();
 ?>
-<tr>
-<td class="center"><?php echo $cnt;?>.</td>
-<td class="hidden-xs"><?php echo $row['PatientName'];?></td>
-<td><?php echo $row['PatientContno'];?></td>
-<td><?php echo $row['PatientGender'];?></td>
-<td><?php echo $row['nextAppointment'];?></td>
-<td><?php echo $row['CreationDate'];?></td>
-<td><?php echo $row['UpdationDate'];?>
-</td>
-<td>
 
-<a href="edit-patient.php?editid=<?php echo $row['ID'];?>" class="btn btn-primary btn-sm" target="_blank">Edit</a> 
+<canvas id="myChart" style="width:100%;max-width:600px"></canvas>
 
-</td>
-</tr>
-<?php 
-$cnt=$cnt+1;
- }?></tbody>
-</table>
+<script>
+// Pass PHP data to JavaScript
+const xValues = <?php echo json_encode($xValues); ?>;
+const yValues = <?php echo json_encode($yValues); ?>;
+
+// Define the chart
+new Chart("myChart", {
+    type: "pie", 
+    data: {
+        labels: xValues,
+        datasets: [{
+            backgroundColor: [
+                "#b91d47",
+                "#00aba9",
+                "#2b5797",
+                "#e8c3b9",
+                "#1e7145"
+            ],
+            data: yValues
+        }]
+    },
+    options: {
+        title: {
+            display: true,
+            text: "Patients Checked by Doctors"
+        }
+    }
+});
+
+</script>
+
 </div>
 </div>
 </div>
 </div>
 </div>
 </div>
-</div>
-</div>
+
+
 			<!-- start: FOOTER -->
 	<?php include('include/footer.php');?>
 			<!-- end: FOOTER -->

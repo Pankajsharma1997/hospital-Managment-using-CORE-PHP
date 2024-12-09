@@ -159,7 +159,7 @@ while($row=mysqli_fetch_array($ret))
         
         <!-- Loop through the array and create a checkbox for each timeslot -->
         <?php 
-        $available_times = ['9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM']; // Example times
+        $available_times = ['10:00 AM', ' 10:30 AM', ' 11:00 AM', ' 11:30 AM', ' 12:00 PM', ' 12:30 PM', ' 01:00 PM', ' 01:30 PM', ' 02:00 PM', ' 02:30 PM', ' 03:00 PM',' 03:30 PM' , ' 04:00 PM' , ' 04:30 PM']; // Example times
         foreach ($available_times as $slot) {
             $checked = in_array($slot, $timeslots) ? 'checked' : ''; // Check if the slot is selected for this doctor
         ?> 

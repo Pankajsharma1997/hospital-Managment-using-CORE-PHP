@@ -2,62 +2,61 @@
 session_start();
 error_reporting(0);
 include('include/config.php');
-if(strlen($_SESSION['id']==0)) {
- header('location:logout.php');
-  } else{
+if(strlen($_SESSION['id'])==0) {
+    header('location:logout.php');
+} else {
     $targetDir = "uploads/";
+    
+    // Check if the form is submitted via POST
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!is_dir($targetDir)) {
-            mkdir($targetDir, 0755, true);
+            mkdir($targetDir, 0755, true); // Create the uploads directory if it doesn't exist
         }
   
         $uploadedFiles = [];
         $errors = [];
 
-        // Retrieve additional form data
+        // Retrieve form data
         $vid = $_GET['viewid'] ?? '';
         $bp = $_POST['bp'] ?? '';
         $bs = $_POST['bs'] ?? '';
         $weight = $_POST['weight'] ?? '';
         $temp = $_POST['temp'] ?? '';
         $pres = $_POST['pres'] ?? '';
+        $next_appointment = $_POST['next_appointment']??'';
+
+
+        // Process files only if they are uploaded
+        if (!empty($_FILES['files']['tmp_name'][0])) {
+            // Process each file
+            foreach ($_FILES['files']['tmp_name'] as $key => $tmpName) {
+                $fileName = basename($_FILES['files']['name'][$key]);
+                $targetFilePath = $targetDir . $fileName;
   
-        // Process each file
-        foreach ($_FILES['files']['tmp_name'] as $key => $tmpName) {
-            $fileName = basename($_FILES['files']['name'][$key]);
-            $targetFilePath = $targetDir . $fileName;
-  
-            // Check for upload errors
-            if ($_FILES['files']['error'][$key] === UPLOAD_ERR_OK) {
-                if (move_uploaded_file($tmpName, $targetFilePath)) {
-                    $uploadedFiles[] = $targetFilePath; // Store full path for DB
+                // Check for upload errors
+                if ($_FILES['files']['error'][$key] === UPLOAD_ERR_OK) {
+                    if (move_uploaded_file($tmpName, $targetFilePath)) {
+                        $uploadedFiles[] = $targetFilePath; // Store full path for DB
+                    } else {
+                        $errors[] = "Error uploading file $fileName.";
+                    }
                 } else {
-                    $errors[] = "Error uploading file $fileName.";
+                    $errors[] = "Error with file $fileName.";
                 }
-            } else {
-                $errors[] = "Error with file $fileName.";
             }
         }
   
-        // Save all uploaded file paths and additional information to the database
-        if (empty($errors) && !empty($uploadedFiles)) {
-            $filePathsString = implode(',', $uploadedFiles);
-            $stmt = $con->prepare("INSERT INTO tblmedicalhistory (PatientID, BloodPressure, BloodSugar, Weight, Temperature, MedicalPres, UploadedFiles) VALUES (?, ?, ?,?,?,?,?)");
-            $stmt->bind_param("sssssss", $vid, $bp, $bs, $weight, $temp, $pres, $filePathsString);
-          
-            if ($stmt->execute()) {
-                echo "Files uploaded successfully: " . implode(', ', $uploadedFiles);
-                
-            } else {
-                echo "Error saving files to database.";
-            }
-            $stmt->close();
-        } else {
-            echo "Errors occurred: " . implode(', ', $errors);
-        }
-  
-        $con->close();
-        exit; // Stop further processing after handling the upload
+           // If files are uploaded, prepare the file paths to save in the database
+            $filePathsString = empty($uploadedFiles) ? null : implode(',', $uploadedFiles);
+           // save medical data in the the database table 
+			$sql=mysqli_query($con,"insert into tblmedicalhistory(PatientID, BloodPressure, BloodSugar, Weight, Temperature, MedicalPres,nextAppointment,UploadedFiles) 
+            values('$vid','$bp','$bs','$weight','$temp','$pres', '$next_appointment','$filePathsString')");
+			if($sql)
+			{
+			echo "<script>window.location.href ='manage-patient.php'</script>";
+			}
+			$con->close();
+			exit; 
     }
 }
 ?>
@@ -150,6 +149,7 @@ if(strlen($_SESSION['id']==0)) {
                                     <td><?php echo $row['PatientMedhis']; ?></td>
                                     <th>Patient Reg Date</th>
                                     <td><?php echo $row['CreationDate']; ?></td>
+                                    
                                 </tr>
                                 <tr>
                                     <th>Report files (if  any) </th>
@@ -160,7 +160,6 @@ if(strlen($_SESSION['id']==0)) {
         echo '<a href="' . trim($file) . '" target="_blank">' . basename(trim($file)) . '</a><br>';
       }
       ?></td>
-                                    
                                 </tr>
                             </table>
                             <?php } ?>
@@ -170,30 +169,48 @@ if(strlen($_SESSION['id']==0)) {
                                 <table class="table table-bordered table-hover">
                                     <tr>
                                         <th>Blood Pressure:</th>
-                                        <td><input name="bp" placeholder="Blood Pressure" class="form-control" required="true"></td>
+                                        <td><input type ="text" name="bp" placeholder="Blood Pressure" class="form-control" required="true"></td>
                                     </tr>
                                     <tr>
                                         <th>Blood Sugar:</th>
-                                        <td><input name="bs" placeholder="Blood Sugar" class="form-control" required="true"></td>
+                                        <td><input  type ="number" name="bs" placeholder="Blood Sugar" class="form-control" required="true"></td>
                                     </tr>
                                     <tr>
                                         <th>Weight:</th>
-                                        <td><input name="weight" placeholder="Weight" class="form-control" required="true"></td>
+                                        <td><input type="number" name="weight" placeholder="Weight" class="form-control" required="true"></td>
                                     </tr>
                                     <tr>
                                         <th>Body Temperature:</th>
-                                        <td><input name="temp" placeholder="Body Temperature" class="form-control" required="true"></td>
+                                        <td><input type = "text" name="temp" placeholder="Body Temperature" class="form-control" required="true"></td>
                                     </tr>
                                     <tr>
                                         <th>Medical Prescription:</th>
                                         <td><textarea name="pres" placeholder="Medical Prescription" rows="12" cols="14" class="form-control" required="true"></textarea></td>
                                     </tr>
                                     <tr>
+                                        <th>Next Appointment:</th>
+                                        <td><input type="date" placeholder="Next Appointment"  name="next_appointment" class="form-control" id="appointment-date"></td>
+                                    </tr>
+                                    <!-- Add Script for show only upcoming 15 days  -->
+                                     <script>
+                                       // Get today's date 
+                                       var today = new Date();
+                                       // Set the current date in the input field
+                                       var dateString = today.toISOString().split('T')[0];
+                                       document.getElementById('appointment-date').setAttribute('min', dateString);
+                                       // Calculate the date for the next 15 Days
+                                       var next15Days = new Date();
+                                       next15Days.setDate(today.getDate()+ 15);
+                                       // Set the max attribute to allow only the next 15 days 
+                                       var next15DaysString = next15Days.toISOString().split('T')[0];
+                                       document.getElementById('appointment-date').setAttribute('max', next15DaysString);
+                                     </script>
+                                    <tr>
                                         <th>Upload Files:</th>
                                         <td>
                                             <div id="fileUploadsContainer">
                                                 <div class="file-upload">
-                                                    <input type="file" name="files[]" accept="*/*" required>
+                                                    <input type="file" name="files[]" accept="*/*">
                                                 </div>
                                             </div>
                                             <div class="add-file">
@@ -222,7 +239,7 @@ $ret = mysqli_query($con, "select * from tblmedicalhistory where PatientID='$vid
     <th>Blood Sugar</th>
     <th>Body Temperature</th>
     <th>Medical Prescription</th>
-    <th>Visit Date</th>
+    <th>Next Appointment </th>
     <th>Uploaded Files</th>
   </tr>
   <?php  
@@ -237,7 +254,7 @@ $ret = mysqli_query($con, "select * from tblmedicalhistory where PatientID='$vid
     <td><?php echo $row['BloodSugar']; ?></td> 
     <td><?php echo $row['Temperature']; ?></td>
     <td><?php echo $row['MedicalPres']; ?></td>
-    <td><?php echo $row['CreationDate']; ?></td>
+    <td><?php echo $row['nextAppointment']; ?></td>
     <td>
       <?php
       // Loop through the file array and generate a link for each file
@@ -262,7 +279,7 @@ $ret = mysqli_query($con, "select * from tblmedicalhistory where PatientID='$vid
             $('.add-file').click(function() {
                 $('#fileUploadsContainer').append(`
                     <div class="file-upload">
-                        <input type="file" name="files[]" accept="*/*" required>
+                        <input type="file" name="files[]" accept="*/*">
                     </div>
                 `);
             });
@@ -277,7 +294,7 @@ $ret = mysqli_query($con, "select * from tblmedicalhistory where PatientID='$vid
                     contentType: false,
                     processData: false,
                     success: function(response) {
-                        alert(response);
+                        alert('Medical History  Added successfully!');
                         window.location.reload();
 
                     },
@@ -288,6 +305,7 @@ $ret = mysqli_query($con, "select * from tblmedicalhistory where PatientID='$vid
             });
         });
     </script>
+
 
     <?php include('include/footer.php');?>
     <?php include('include/setting.php');?>

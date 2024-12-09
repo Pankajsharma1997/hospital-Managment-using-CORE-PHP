@@ -46,6 +46,7 @@ $query=mysqli_query($con,"insert into appointment(doctorSpecialization,doctorId,
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
 		<script>
+			
 function getdoctor(val) {
 	$.ajax({
 	type: "POST",
@@ -185,7 +186,23 @@ while($row=mysqli_fetch_array($ret))
 											
 														 <div class="form-group">
     <label for="AppointmentDate">Date</label>
-    <input class="form-control datepicker" name="appdate" id="appdate" onChange="gettimeslot(this.value);" required="required"  data-date-format="yyyy-mm-dd">
+    <!-- <input class="form-control datepicker" name="appdate" id="appdate" onChange="gettimeslot(this.value);" required="required"  data-date-format="yyyy-mm-dd"> -->
+	<input type ="date" class="form-control" name="appdate" id="appdate" onChange="gettimeslot(this.value);" required="required">
+	
+	<!-- Add Script for show only upcoming 15 dates for the booking  -->
+									 <script>
+										// Get today's date 
+										var today = new Date();
+										// Set the current date in the input field 
+										var dateString = today.toISOString().split('T')[0];
+										document.getElementById('appdate').setAttribute('min', dateString);
+										// Calculate the date for the next 15 Days 
+										var next15Days = new Date();
+										next15Days.setDate(today.getDate()+ 15);
+										// Set the max attribute to allow onlu the next 15 days 
+										var next15DaysString = next15Days.toISOString().split('T')[0];
+										document.getElementById('appdate').setAttribute('max', next15DaysString);
+									 </script>
 </div>
 
 

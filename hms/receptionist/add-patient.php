@@ -23,26 +23,29 @@ if (strlen($_SESSION['id']) == 0) {
         $patage = $_POST['patage'];
         $medhis = $_POST['medhis'];
 
-        // Process each file
-        foreach ($_FILES['files']['tmp_name'] as $key => $tmpName) {
-            $fileName = basename($_FILES['files']['name'][$key]);
-            $targetFilePath = $targetDir . $fileName;
+         // Process each file only if files are uploaded
+		 if (!empty($_FILES['files']['name'][0])) {
+            // Loop through the uploaded files
+            foreach ($_FILES['files']['tmp_name'] as $key => $tmpName) {
+                $fileName = basename($_FILES['files']['name'][$key]);
+                $targetFilePath = $targetDir . $fileName;
 
-            // Check for upload errors
-            if ($_FILES['files']['error'][$key] === UPLOAD_ERR_OK) {
-                if (move_uploaded_file($tmpName, $targetFilePath)) {
-                    $uploadedFiles[] = $targetFilePath; // Store full path for DB
+                // Check for upload errors
+                if ($_FILES['files']['error'][$key] === UPLOAD_ERR_OK) {
+                    if (move_uploaded_file($tmpName, $targetFilePath)) {
+                        $uploadedFiles[] = $targetFilePath; // Store full path for DB
+                    } else {
+                        $errors[] = "Error uploading file $fileName.";
+                    }
                 } else {
-                    $errors[] = "Error uploading file $fileName.";
+                    $errors[] = "Error with file $fileName.";
                 }
-            } else {
-                $errors[] = "Error with file $fileName.";
             }
         }
 
         // Save all uploaded file paths and additional information to the database
-       
-            $filePathsString = implode(',', $uploadedFiles);
+        $filePathsString = !empty($uploadedFiles) ? implode(',', $uploadedFiles) : null;
+        // Save all uploaded file paths and additional information to the database
 			$sql=mysqli_query($con,"insert into tblpatient(Docid,PatientName,PatientContno,PatientEmail,PatientGender,PatientAdd,PatientAge,PatientMedhis ,UploadedFiles) values('$docid','$patname','$patcontact','$patemail','$gender','$pataddress','$patage','$medhis','$filePathsString')");
 			if($sql)
 			{
@@ -244,7 +247,7 @@ Patient Address
 	<label for ="upload file">  Upload Reports </label> 
                                             <div id="fileUploadsContainer">
                                                 <div class="file-upload">
-                                                    <input type="file" name="files[]" accept="*/*" required>
+                                                    <input type="file" name="files[]" accept="*/*">
                                                 </div>
                                             </div>
                                             <div class="add-file">
@@ -289,7 +292,7 @@ Add
             $('.add-file').click(function() {
                 $('#fileUploadsContainer').append(`
                     <div class="file-upload">
-                        <input type="file" name="files[]" accept="*/*" required>
+                        <input type="file" name="files[]" accept="*/*">
                     </div>
                 `);
             });
@@ -315,7 +318,7 @@ Add
         });
     </script>
 
-		<!-- start: MAIN JAVASCRIPTS -->
+	<!-- start: MAIN JAVASCRIPTS -->
 		<script src="vendor/jquery/jquery.min.js"></script>
 		<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
 		<script src="vendor/modernizr/modernizr.js"></script>
