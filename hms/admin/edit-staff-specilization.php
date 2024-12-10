@@ -97,6 +97,7 @@ while($row=mysqli_fetch_array($sql))
 														<button type="submit" name="submit" class="btn btn-o btn-primary">
 															Update
 														</button>
+														<a href="dashboard.php" class="btn btn-o btn-primary" style="margin-left: 20px;"> Back to Home Page </a>
 													</form>
 												</div>
 											</div>

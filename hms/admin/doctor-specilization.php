@@ -54,6 +54,7 @@ $_SESSION['msg']="data deleted !!";
 						<section id="page-title">
 							<div class="row">
 								<div class="col-sm-8">
+								
 									<h1 class="mainTitle">Admin | Add Doctor Specialization</h1>
 																	</div>
 								<ol class="breadcrumb">
@@ -63,6 +64,7 @@ $_SESSION['msg']="data deleted !!";
 									<li class="active">
 										<span>Add Doctor Specialization</span>
 									</li>
+								
 								</ol>
 							</div>
 						</section>
@@ -88,13 +90,10 @@ $_SESSION['msg']="data deleted !!";
 															</label>
 							<input type="text" name="doctorspecilization" class="form-control"  placeholder="Enter Doctor Specialization">
 														</div>
-												
-														
-														
-														
 														<button type="submit" name="submit" class="btn btn-o btn-primary">
 															Submit
 														</button>
+														<a href="dashboard.php" class="btn btn-o btn-primary" style="margin-left: 20px;"> Back to Home Page </a>
 													</form>
 												</div>
 											</div>

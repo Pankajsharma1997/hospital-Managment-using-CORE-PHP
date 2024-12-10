@@ -78,6 +78,7 @@ $msg="Doctor Details updated Successfully";
 						<div class="container-fluid container-fullw bg-white">
 							<div class="row">
 								<div class="col-md-12">
+								<a href="dashboard.php" class="btn btn-o btn-primary"> Back to Home Page </a>
 									<h5 style="color: green; font-size:18px; ">
 <?php if($msg) { echo htmlentities($msg);}?> </h5>
 									<div class="row margin-top-30">
@@ -181,6 +182,8 @@ while($row=mysqli_fetch_array($ret))
 														<button type="submit" name="submit" class="btn btn-o btn-primary">
 															Update
 														</button>
+														
+
 													</form>
 												</div>
 											</div>

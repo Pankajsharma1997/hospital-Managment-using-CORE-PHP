@@ -88,6 +88,7 @@ if(strlen($_SESSION['id']==0)) {
                                                     <button type="submit" name="submit" class="btn btn-o btn-primary">
                                                         Submit
                                                     </button>
+                                                    <a href="dashboard.php" class="btn btn-o btn-primary"> Back to Home Page </a>
                                                 </form>
                                             </div>
                                         </div>
